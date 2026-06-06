@@ -1,6 +1,15 @@
 import os
 import re
+import sys
+from datetime import datetime
 from pypdf import PdfReader
+
+# =========================================================================
+# 🛑 সুরক্ষার জন্য মেয়াদের শেষ তারিখ (বছর, মাস, দিন)
+# এই তারিখ পার হয়ে গেলে সফটওয়্যার আর কাজ করবে না। 
+# আপনি নিজের জন্য তারিখটি বাড়িয়ে ২০২৭, ২০৩০ বা যা খুশি করে নিতে পারবেন।
+# =========================================================================
+EXPIRY_DATE = datetime(2026, 12, 31) 
 
 def normalize_text(text):
     if not text: return ""
@@ -84,6 +93,15 @@ def start_renaming(path, names_list, extra_info=""):
     print("-"*30)
 
 if __name__ == "__main__":
+    # 🔒 সফটওয়্যার রান হওয়ার সাথে সাথেই বর্তমান তারিখ চেক করা হচ্ছে
+    if datetime.now() > EXPIRY_DATE:
+        print("\n" + "!"*60)
+        print("Error: This software version has expired!")
+        print("Please contact the original developer for an updated version.")
+        print("!"*60)
+        input("\nPress Enter to exit...")
+        sys.exit()
+
     # Your full customer list
     target_names = [
         "Abdul Hardware", "Abhijit Pal", "Acharjee Hardware", "Adhikary Iron", "Anirban Builders", 
